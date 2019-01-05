@@ -1,8 +1,11 @@
-function renderViz(dataset, faceComponents) {
+function renderViz(dataset, faceComponents, lang) {
+
+  lang = lang || 'th'
+
   // Draw the map
   let options = {
     radius: 30
-  }
+  }  
 
   let svg = d3.select('svg#map')
     .attr('width', options.radius * 25)
@@ -37,7 +40,11 @@ function renderViz(dataset, faceComponents) {
     .style('text-anchor', 'middle')
     .style('font-size', '11px')
     .text(d => {
-      return d.thName
+      if (lang == 'en') {
+        return d.enAbbr
+      } else if (lang == 'th') {
+        return d.thName
+      }
     })
 
 
@@ -114,22 +121,40 @@ function renderViz(dataset, faceComponents) {
       tooltip.transition()
         .duration(200)
         .style("opacity", 0.95)
-      tooltip.html(
-          `
-        <strong>${d.thName}</strong>
-        <hr />
-        <p>จำนวนคนจน ${numberWithCommas(d['poor.JPT.MOFval.CNT'])} คน คิดเป็น ${round(d['poor.JPT.CNT.rate'] * 100, 1)} % ของจำนวนคนที่สำรวจทั้งจังหวัด ${numberWithCommas(d['HOUSEMEMBER_CNT'])} คน</p>
-        <p><small>เป็นอันดับที่ <button>${cntRates.indexOf(+d['poor.JPT.CNT.rate'])+1}</button> ของประเทศ</small></p>
-        <hr />
-        <p>มีคนจนด้านสุขภาพ ${numberWithCommas(d['poor.JPT.MOFval.health'])} คน คิดเป็น ${round(d['poor.JPT.MOFval.health.rate'] * 100, 1)} % <small>ของจำนวนคนที่สำรวจทั้งจังหวัด เป็นอันดับที่</small> <button>${healthRates.indexOf(+d['poor.JPT.MOFval.health.rate'])+1}</button> <small>ของประเทศ</small></p>
-        <p>มีคนจนด้านความเป็นอยู่ ${numberWithCommas(d['poor.JPT.MOFval.living'])} คน คิดเป็น ${round(d['poor.JPT.MOFval.living.rate'] * 100, 1)} % <small>ของจำนวนคนที่สำรวจทั้งจังหวัด เป็นอันดับที่</small> <button>${livingRates.indexOf(+d['poor.JPT.MOFval.living.rate'])+1}</button> <small>ของประเทศ</small></p>
-        <p>มีคนจนด้านการศึกษา ${numberWithCommas(d['poor.JPT.MOFval.education'])} คน คิดเป็น ${round(d['poor.JPT.MOFval.education.rate'] * 100, 1)} %<small>ของจำนวนคนที่สำรวจทั้งจังหวัด เป็นอันดับที่</small>  <button>${educationRates.indexOf(+d['poor.JPT.MOFval.education.rate'])+1}</button> <small>ของประเทศ</small></p>
-        <p>มีคนจนด้านรายได้ ${numberWithCommas(d['poor.JPT.MOFval.income'])} คน คิดเป็น ${round(d['poor.JPT.MOFval.income.rate'] * 100, 1)} % <small>ของจำนวนคนที่สำรวจทั้งจังหวัด เป็นอันดับที่</small>  <button>${incomeRates.indexOf(+d['poor.JPT.MOFval.income.rate'])+1}</button> <small>ของประเทศ</small></p>
-        <p>มีคนจนด้านการเข้าถึงบริการภาครัฐ ${numberWithCommas(d['poor.JPT.MOFval.accessibility'])} คน คิดเป็น ${round(d['poor.JPT.MOFval.accessibility.rate'] * 100, 2)} % <small>ของจำนวนคนที่สำรวจทั้งจังหวัด เป็นอันดับที่</small> <button>${accessibilityRates.indexOf(+d['poor.JPT.MOFval.accessibility.rate'])+1}</button> <small>ของประเทศ</small></p>
-        `
-        )
         .style("left", `${d3.event.pageX + options.radius}px`)
         .style("top", `${d3.event.pageY + 0.5 * options.radius}px`)
+
+      if (lang == 'en') {
+        tooltip.html(
+          `
+          <strong>${d.enName}</strong>
+          <hr />
+          <p>${numberWithCommas(d['poor.JPT.MOFval.CNT'])} people lived in poverty accounted for ${round(d['poor.JPT.CNT.rate'] * 100, 1)} % of ${numberWithCommas(d['HOUSEMEMBER_CNT'])} people surveyed.</p>
+          <p>#<button>${cntRates.indexOf(+d['poor.JPT.CNT.rate'])+1}</button> / 76 in the country</p>
+          <hr />
+          <p>#<button>${healthRates.indexOf(+d['poor.JPT.MOFval.health.rate'])+1}</button>: ${numberWithCommas(d['poor.JPT.MOFval.health'])} people or ${round(d['poor.JPT.MOFval.health.rate'] * 100, 1)} % had deprived healthcare.</p>
+          <p>#<button>${livingRates.indexOf(+d['poor.JPT.MOFval.living.rate'])+1}</button>: ${numberWithCommas(d['poor.JPT.MOFval.living'])} people or ${round(d['poor.JPT.MOFval.living.rate'] * 100, 1)} % had deprived living conditions.</p>
+          <p>#<button>${educationRates.indexOf(+d['poor.JPT.MOFval.education.rate'])+1}</button>: ${numberWithCommas(d['poor.JPT.MOFval.education'])} people or ${round(d['poor.JPT.MOFval.education.rate'] * 100, 1)} % had deprived education.</p>
+          <p>#<button>${incomeRates.indexOf(+d['poor.JPT.MOFval.income.rate'])+1}</button>: ${numberWithCommas(d['poor.JPT.MOFval.income'])} people or ${round(d['poor.JPT.MOFval.income.rate'] * 100, 1)} % had deprived income.</p>
+          <p>#<button>${accessibilityRates.indexOf(+d['poor.JPT.MOFval.accessibility.rate'])+1}</button>: ${numberWithCommas(d['poor.JPT.MOFval.accessibility'])} people or ${round(d['poor.JPT.MOFval.accessibility.rate'] * 100, 1)} % had deprived access to public services.</p>
+          `
+        )
+      } else if (lang == 'th') {
+        tooltip.html(
+          `
+          <strong>${d.thName}</strong>
+          <hr />
+          <p>จำนวนคนจน ${numberWithCommas(d['poor.JPT.MOFval.CNT'])} คน คิดเป็น ${round(d['poor.JPT.CNT.rate'] * 100, 1)} % ของจำนวนคนที่สำรวจทั้งจังหวัด ${numberWithCommas(d['HOUSEMEMBER_CNT'])} คน</p>
+          <p><small>เป็นอันดับที่ <button>${cntRates.indexOf(+d['poor.JPT.CNT.rate'])+1}</button> ของประเทศ</small></p>
+          <hr />
+          <p>มีคนจนด้านสุขภาพ ${numberWithCommas(d['poor.JPT.MOFval.health'])} คน คิดเป็น ${round(d['poor.JPT.MOFval.health.rate'] * 100, 1)} % <small>ของจำนวนคนที่สำรวจทั้งจังหวัด เป็นอันดับที่</small> <button>${healthRates.indexOf(+d['poor.JPT.MOFval.health.rate'])+1}</button> <small>ของประเทศ</small></p>
+          <p>มีคนจนด้านความเป็นอยู่ ${numberWithCommas(d['poor.JPT.MOFval.living'])} คน คิดเป็น ${round(d['poor.JPT.MOFval.living.rate'] * 100, 1)} % <small>ของจำนวนคนที่สำรวจทั้งจังหวัด เป็นอันดับที่</small> <button>${livingRates.indexOf(+d['poor.JPT.MOFval.living.rate'])+1}</button> <small>ของประเทศ</small></p>
+          <p>มีคนจนด้านการศึกษา ${numberWithCommas(d['poor.JPT.MOFval.education'])} คน คิดเป็น ${round(d['poor.JPT.MOFval.education.rate'] * 100, 1)} % <small>ของจำนวนคนที่สำรวจทั้งจังหวัด เป็นอันดับที่</small>  <button>${educationRates.indexOf(+d['poor.JPT.MOFval.education.rate'])+1}</button> <small>ของประเทศ</small></p>
+          <p>มีคนจนด้านรายได้ ${numberWithCommas(d['poor.JPT.MOFval.income'])} คน คิดเป็น ${round(d['poor.JPT.MOFval.income.rate'] * 100, 1)} % <small>ของจำนวนคนที่สำรวจทั้งจังหวัด เป็นอันดับที่</small>  <button>${incomeRates.indexOf(+d['poor.JPT.MOFval.income.rate'])+1}</button> <small>ของประเทศ</small></p>
+          <p>มีคนจนด้านการเข้าถึงบริการภาครัฐ ${numberWithCommas(d['poor.JPT.MOFval.accessibility'])} คน คิดเป็น ${round(d['poor.JPT.MOFval.accessibility.rate'] * 100, 2)} % <small>ของจำนวนคนที่สำรวจทั้งจังหวัด เป็นอันดับที่</small> <button>${accessibilityRates.indexOf(+d['poor.JPT.MOFval.accessibility.rate'])+1}</button> <small>ของประเทศ</small></p>
+          `
+        )
+      }
     })
     .on("mouseout", function (d) {
       d3.select(this)
