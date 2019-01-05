@@ -5,6 +5,8 @@ Visualizing states of poverty in Thailand through facial expressions
 
 ---
 
+[View Interactive Visualization](https://na399.github.io/faces-of-poverty/index.en.html)
+
 This is an experimentation with D3.js to draw emojis with different facial components determined by the ranking of poverty from each province in Thailand.
 
 The publicly available data was obtained from [Thai People Map and Analytics Platform](https://www.tpmap.in.th/).
@@ -12,3 +14,5 @@ The publicly available data was obtained from [Thai People Map and Analytics Pla
 The gridmap layout of Thailand was obtained from [Gridmap Layout Thailand](https://github.com/kristw/gridmap-layout-thailand).
 
 This work was inspired by [The Emoji States of America](https://www.axios.com/the-emoji-states-of-america-1513302318-0ca61705-de75-4c8f-8521-5cbab12a45f2.html).
+
+![Preview of Faces of Poverty](preview.png)
